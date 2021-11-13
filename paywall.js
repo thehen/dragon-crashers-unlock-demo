@@ -44,6 +44,19 @@ async function initializePaywall( paywallConfig ) {
   window.unlockProtocolConfig = JSON.parse(paywallConfig);
   window.unlockProtocol.resetConfig(window.unlockProtocolConfig);
   //console.log(paywallConfig);
+
+  window.addEventListener("unlockProtocol.status", function (event) {
+    window.gameInstance.SendMessage('UnlockPaywall', 'UpdateStatus', event.detail.state);
+  });
+  
+  window.addEventListener("unlockProtocol.authenticated", function (event) {
+    window.gameInstance.SendMessage('UnlockPaywall', 'UpdateAddress', event.detail.address);
+  });
+  
+  window.addEventListener("unlockProtocol.transactionSent", function (event) {
+    window.gameInstance.SendMessage('UnlockPaywall', 'UpdateHash', event.detail.hash);
+  });
+
 }
 
 async function loadCheckoutModal( lockConfig ) {
@@ -52,17 +65,7 @@ async function loadCheckoutModal( lockConfig ) {
   window.unlockProtocol.loadCheckoutModal(config)
 }
 
-window.addEventListener("unlockProtocol.status", function (event) {
-  window.gameInstance.SendMessage('UnlockPaywall', 'UpdateStatus', event.detail.state);
-});
 
-window.addEventListener("unlockProtocol.authenticated", function (event) {
-  window.gameInstance.SendMessage('UnlockPaywall', 'UpdateAddress', event.detail.address);
-});
-
-window.addEventListener("unlockProtocol.transactionSent", function (event) {
-  window.gameInstance.SendMessage('UnlockPaywall', 'UpdateHash', event.detail.hash);
-});
 UnlockUnity = __webpack_exports__;
 /******/ })()
 ;
